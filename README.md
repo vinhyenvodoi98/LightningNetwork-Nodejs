@@ -11,3 +11,9 @@ scripts/simnet-env.sh
 ```
 
 then copy in .env
+
+Để xem balance của wallet
+
+```sh
+docker-compose exec simnet-lnd-btcd-alice lncli --rpcserver=localhost:10009 --macaroonpath=~/.lnd/data/chain/bitcoin/simnet/admin.macaroon walletbalance
+```
