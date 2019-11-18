@@ -17,3 +17,9 @@ then copy in .env
 ```sh
 docker-compose exec simnet-lnd-btcd-alice lncli --rpcserver=localhost:10009 --macaroonpath=~/.lnd/data/chain/bitcoin/simnet/admin.macaroon walletbalance
 ```
+
+migrate btcd
+
+```sh
+docker-compose run simnet-btcctl generate 5 > /dev/null
+```

@@ -11,10 +11,7 @@ process.env.GRPC_SSL_CIPHER_SUITES = 'HIGH+ECDSA';
 var lndCert = Buffer.from(process.env.LND_CERT, 'utf8');
 var sslCreds = grpc.credentials.createSsl(lndCert);
 
-var macaroonCreds = grpc.credentials.createFromMetadataGenerator(function(
-  args,
-  callback
-) {
+var macaroonCreds = grpc.credentials.createFromMetadataGenerator(function(args, callback) {
   var macaroon = process.env.LND_MACAROON;
   var metadata = new grpc.Metadata();
   metadata.add('macaroon', macaroon);
@@ -43,7 +40,7 @@ var newAddress = () => {
 var walletBalance = () => {
   request = {};
   lightning.walletBalance(request, function(err, response) {
-    console.log(response);
+    console.log(BigInt(response.total_balance).toString());
   });
 };
 
@@ -52,8 +49,7 @@ var connectPeer = () => {
     //this is addr test
 
     addr: {
-      pubkey:
-        '03c5a180fe2d2805dc82065ba4656613c32b4adfb4200bdb52d01a593b3ff080ae',
+      pubkey: '03c5a180fe2d2805dc82065ba4656613c32b4adfb4200bdb52d01a593b3ff080ae',
       host: 'localhost:10012'
     },
     perm: true
@@ -72,11 +68,10 @@ var listPeers = () => {
 
 var openChannel = () => {
   // this is pubkey test
-  var pubkey =
-    '02c9c7b15e75e9c33671fd6c82d8218f5b4dca825c7d831c77902b941330da04c9';
+  var pubkey = '02d61e6b1e69f56e1be75fc270abdb9daade494df32ce4b7bb008a0caed5e4bb3c';
   var request = {
     node_pubkey_string: pubkey,
-    local_funding_amount: 5000000,
+    local_funding_amount: 1000000,
     push_sat: 0,
     target_conf: 1,
     private: false,
@@ -106,9 +101,29 @@ var listChannel = () => {
 
 var addInvoice = () => {
   var request = {
-    amt_paid: 10000
+    amt_paid: 50000
   };
   lightning.addInvoice(request, function(err, response) {
+    console.log(response);
+  });
+};
+
+var sendPayment = () => {
+  var request = {
+    // dest: <bytes>,
+    // dest_string: <string>,
+    // amt: <int64>,
+    // payment_hash: <bytes>,
+    // payment_hash_string: <string>,
+    payment_request:
+      'lnsb10u1pwuukn8pp54v3xgpv84k8du9l00j8dc0lj7rg5qqc2vpk7496tlm8zv2uyxausdqqcqzpg8tx8z98t8vlvgv5cx9wdc7ch65puxf7e43zgaj3gyu2whvr9rwexe9nns82rpruawr79nraztg0chcg9y5zu8zyagysuvp77k2tjzngq9sezqz'
+    // final_cltv_delta: <int32>,
+    // fee_limit: <FeeLimit>,
+    // outgoing_chan_id: <uint64>,
+    // cltv_limit: <uint32>,
+    // dest_tlv: <array DestTlvEntry>,
+  };
+  lightning.sendPaymentSync(request, function(err, response) {
     console.log(response);
   });
 };
@@ -116,8 +131,7 @@ var addInvoice = () => {
 var closeChannel = () => {
   var request = {
     channel_point: {
-      funding_txid_str:
-        '229e6fbbe4942c1e405fdf50c55174a609440fb39f20e822eec34286aadab098',
+      funding_txid_str: 'f7b8c3536f38a6e7b9429a0be075e3b4f656dc7c4972af63c057a4e361e6f87b',
       output_index: 0
     }
   };
@@ -133,13 +147,31 @@ var channalBalance = () => {
     console.log(response);
   });
 };
+
 // getInfo();
 // walletBalance();
 // newAddress();
-// listPeers();
+listPeers();
 // connectPeer();
 // listChannel();
 // openChannel();
-addInvoice();
+// addInvoice();
+// sendPayment();
 // channelBalance();
 // closeChannel();
+
+//02b91a3e09cc9e207aea58a6a172b94fd6946cc7f364b13b9419c17fee56b6dca1 alice
+//02d61e6b1e69f56e1be75fc270abdb9daade494df32ce4b7bb008a0caed5e4bb3c bob
+module.exports = {
+  getInfo,
+  walletBalance,
+  newAddress,
+  listPeers,
+  connectPeer,
+  listChannel,
+  openChannel,
+  addInvoice,
+  sendPayment,
+  channelBalance,
+  closeChannel
+};

@@ -6,7 +6,7 @@ if hash jq 2>/dev/null; then
     echo jq already installed
 else
     case "$OSTYPE" in
-      darwin*)  brew install jq ;; 
+      darwin*)  brew install jq ;;
       linux*)   sudo apt-get install jq ;;
       msys*)    chocolatey install jq ;;
       *)        echo "unknown: $OSTYPE" ;;
@@ -20,7 +20,7 @@ docker-compose up -d simnet-btcd && sleep 5
 docker-compose run simnet-btcctl generate 500 > /dev/null && sleep 5
 
 docker-compose up -d simnet-lnd-btcd-alice
-docker-compose up -d simnet-lnd-btcd-bob 
+docker-compose up -d simnet-lnd-btcd-bob
 docker-compose up -d simnet-lnd-btcd-charlie && sleep 5
 
 # retreive pubkey for bob
