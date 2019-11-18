@@ -22,136 +22,159 @@ var creds = grpc.credentials.combineChannelCredentials(sslCreds, macaroonCreds);
 var lightning = new lnrpc.Lightning('localhost:10009', creds);
 
 var getInfo = () => {
-  var request = {};
-  lightning.getInfo(request, function(err, response) {
-    console.log(response);
+  return new Promise((resolve, reject) => {
+    var request = {};
+    lightning.getInfo(request, (err, response) => {
+      resolve(response);
+    });
   });
 };
 
 var newAddress = () => {
-  var request = {
-    type: ''
-  };
-  lightning.newAddress(request, function(err, response) {
-    console.log(response);
+  return new Promise((resolve, reject) => {
+    var request = {
+      type: ''
+    };
+    lightning.newAddress(request, function(err, response) {
+      resolve(response);
+    });
   });
 };
 
 var walletBalance = () => {
-  request = {};
-  lightning.walletBalance(request, function(err, response) {
-    console.log(BigInt(response.total_balance).toString());
+  return new Promise((resolve, reject) => {
+    request = {};
+    lightning.walletBalance(request, function(err, response) {
+      resolve(response);
+    });
   });
 };
 
 var connectPeer = () => {
-  var request = {
-    //this is addr test
-
-    addr: {
-      pubkey: '03c5a180fe2d2805dc82065ba4656613c32b4adfb4200bdb52d01a593b3ff080ae',
-      host: 'localhost:10012'
-    },
-    perm: true
-  };
-  lightning.connectPeer(request, function(err, response) {
-    console.log(response);
+  return new Promise((resolve, reject) => {
+    var request = {
+      //this is addr test
+      addr: {
+        pubkey: '03c5a180fe2d2805dc82065ba4656613c32b4adfb4200bdb52d01a593b3ff080ae',
+        host: 'localhost:10012'
+      },
+      perm: true
+    };
+    lightning.connectPeer(request, function(err, response) {
+      resolve(response);
+    });
   });
 };
 
 var listPeers = () => {
-  var request = {};
-  lightning.listPeers(request, function(err, response) {
-    console.log(response);
+  return new Promise((resolve, reject) => {
+    var request = {};
+    lightning.listPeers(request, function(err, response) {
+      resolve(response);
+    });
   });
 };
 
 var openChannel = () => {
-  // this is pubkey test
-  var pubkey = '02d61e6b1e69f56e1be75fc270abdb9daade494df32ce4b7bb008a0caed5e4bb3c';
-  var request = {
-    node_pubkey_string: pubkey,
-    local_funding_amount: 1000000,
-    push_sat: 0,
-    target_conf: 1,
-    private: false,
-    min_confs: 3,
-    spend_unconfirmed: false
-  };
-  lightning.openChannelSync(request, function(err, response) {
-    console.log(response);
+  return new Promise((resolve, reject) => {
+    // this is pubkey test
+    var pubkey = '02d61e6b1e69f56e1be75fc270abdb9daade494df32ce4b7bb008a0caed5e4bb3c';
+    var request = {
+      node_pubkey_string: pubkey,
+      local_funding_amount: 1000000,
+      push_sat: 0,
+      target_conf: 1,
+      private: false,
+      min_confs: 3,
+      spend_unconfirmed: false
+    };
+    lightning.openChannelSync(request, function(err, response) {
+      resolve(response);
+    });
   });
 };
 
 var channelBalance = () => {
-  var request = {};
-  lightning.channelBalance(request, function(err, response) {
-    console.log(response);
+  return new Promise((resolve, reject) => {
+    var request = {};
+    lightning.channelBalance(request, function(err, response) {
+      resolve(response);
+    });
   });
 };
 
 var listChannel = () => {
-  var request = {
-    active_only: true
-  };
-  lightning.listChannels(request, function(err, response) {
-    console.log(response);
+  return new Promise((resolve, reject) => {
+    var request = {
+      active_only: true
+    };
+    lightning.listChannels(request, function(err, response) {
+      resolve(response);
+    });
   });
 };
 
 var addInvoice = () => {
-  var request = {
-    amt_paid: 50000
-  };
-  lightning.addInvoice(request, function(err, response) {
-    console.log(response);
+  return new Promise((resolve, reject) => {
+    var request = {
+      amt_paid: 50000
+    };
+    lightning.addInvoice(request, function(err, response) {
+      resolve(response);
+    });
   });
 };
 
 var sendPayment = () => {
-  var request = {
-    // dest: <bytes>,
-    // dest_string: <string>,
-    // amt: <int64>,
-    // payment_hash: <bytes>,
-    // payment_hash_string: <string>,
-    payment_request:
-      'lnsb10u1pwuukn8pp54v3xgpv84k8du9l00j8dc0lj7rg5qqc2vpk7496tlm8zv2uyxausdqqcqzpg8tx8z98t8vlvgv5cx9wdc7ch65puxf7e43zgaj3gyu2whvr9rwexe9nns82rpruawr79nraztg0chcg9y5zu8zyagysuvp77k2tjzngq9sezqz'
-    // final_cltv_delta: <int32>,
-    // fee_limit: <FeeLimit>,
-    // outgoing_chan_id: <uint64>,
-    // cltv_limit: <uint32>,
-    // dest_tlv: <array DestTlvEntry>,
-  };
-  lightning.sendPaymentSync(request, function(err, response) {
-    console.log(response);
+  return new Promise((resolve, reject) => {
+    var request = {
+      // dest: <bytes>,
+      // dest_string: <string>,
+      // amt: <int64>,
+      // payment_hash: <bytes>,
+      // payment_hash_string: <string>,
+      payment_request:
+        'lnsb10u1pwuukn8pp54v3xgpv84k8du9l00j8dc0lj7rg5qqc2vpk7496tlm8zv2uyxausdqqcqzpg8tx8z98t8vlvgv5cx9wdc7ch65puxf7e43zgaj3gyu2whvr9rwexe9nns82rpruawr79nraztg0chcg9y5zu8zyagysuvp77k2tjzngq9sezqz'
+      // final_cltv_delta: <int32>,
+      // fee_limit: <FeeLimit>,
+      // outgoing_chan_id: <uint64>,
+      // cltv_limit: <uint32>,
+      // dest_tlv: <array DestTlvEntry>,
+    };
+    lightning.sendPaymentSync(request, function(err, response) {
+      resolve(response);
+    });
   });
 };
 
 var closeChannel = () => {
-  var request = {
-    channel_point: {
-      funding_txid_str: 'f7b8c3536f38a6e7b9429a0be075e3b4f656dc7c4972af63c057a4e361e6f87b',
-      output_index: 0
-    }
-  };
-  var call = lightning.closeChannel(request);
-  call.on('data', function(response) {
-    console.log(response);
+  return new Promise((resolve, reject) => {
+    var request = {
+      channel_point: {
+        funding_txid_str: 'f7b8c3536f38a6e7b9429a0be075e3b4f656dc7c4972af63c057a4e361e6f87b',
+        output_index: 0
+      }
+    };
+    var call = lightning.closeChannel(request);
+    call.on('data', function(response) {
+      resolve(response);
+    });
   });
 };
 
 var channalBalance = () => {
-  var request = {};
-  lightning.channelBalance(request, function(err, response) {
-    console.log(response);
+  return new Promise((resolve, reject) => {
+    var request = {};
+    lightning.channelBalance(request, function(err, response) {
+      resolve(response);
+    });
   });
 };
 
 // getInfo();
 // walletBalance();
 // newAddress();
-listPeers();
+// listPeers();
 // connectPeer();
 // listChannel();
 // openChannel();
