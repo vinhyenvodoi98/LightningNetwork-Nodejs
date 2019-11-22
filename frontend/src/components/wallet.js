@@ -56,14 +56,9 @@ export default function Wallet() {
         <div className='row'>
           {info ? (
             <>
-              <input
-                type='text'
-                className='form-control col'
-                disabled
-                value={info.identity_pubkey}
-              />
+              <input type='text' className='form-control col' disabled value={info.uris} />
 
-              <CopyToClipboard onCopy={onCopy} text={info.identity_pubkey}>
+              <CopyToClipboard onCopy={onCopy} text={info.uris}>
                 <button className='btn btn-primary'>Copy</button>
               </CopyToClipboard>
             </>
@@ -77,14 +72,6 @@ export default function Wallet() {
           )}
         </div>
       </div>
-      {/* <div className='col-2 box'>
-        <div className='justify-content-center'>
-          <p>Identity Pubkey:</p>
-        </div>
-        <div>
-          <div>{info ? <div>{info.identity_pubkey}</div> : <></>}</div>
-        </div>
-      </div> */}
     </div>
   );
 }

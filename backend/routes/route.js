@@ -17,6 +17,25 @@ router.get('/walletBalance', async (req, res) => {
   });
 });
 
+router.get('/listPeers', async (req, res) => {
+  var listPeers = await rpc.listPeers();
+  res.json({
+    listPeers
+  });
+});
+
+router.post('/connectPeer', async (req, res) => {
+  var connectPeer = await rpc.connectPeer(req.body.pub_key);
+  res.json({
+    connectPeer
+  });
+});
+
+router.post('/disconnectPeer', async (req, res) => {
+  var disconnectPeer = await rpc.disconnectPeer(req.body.pub_key);
+  res.json(disconnectPeer);
+});
+
 router.post('/', async (req, res) => {
   res.json({
     hello: 'hello' + req.body.hello

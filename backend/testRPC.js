@@ -50,13 +50,13 @@ var walletBalance = () => {
   });
 };
 
-var connectPeer = () => {
+var connectPeer = pub_key => {
+  addr = pub_key.split('@');
   return new Promise((resolve, reject) => {
     var request = {
-      //this is addr test
       addr: {
-        pubkey: '03c5a180fe2d2805dc82065ba4656613c32b4adfb4200bdb52d01a593b3ff080ae',
-        host: 'localhost:10012'
+        pubkey: addr[0],
+        host: addr[1]
       },
       perm: true
     };
@@ -70,6 +70,17 @@ var listPeers = () => {
   return new Promise((resolve, reject) => {
     var request = {};
     lightning.listPeers(request, function(err, response) {
+      resolve(response);
+    });
+  });
+};
+
+var disconnectPeer = pub_key => {
+  return new Promise((resolve, reject) => {
+    var request = {
+      pub_key
+    };
+    lightning.disconnectPeer(request, function(err, response) {
       resolve(response);
     });
   });
@@ -171,18 +182,6 @@ var channalBalance = () => {
   });
 };
 
-// getInfo();
-// walletBalance();
-// newAddress();
-// listPeers();
-// connectPeer();
-// listChannel();
-// openChannel();
-// addInvoice();
-// sendPayment();
-// channelBalance();
-// closeChannel();
-
 //02b91a3e09cc9e207aea58a6a172b94fd6946cc7f364b13b9419c17fee56b6dca1 alice
 //02d61e6b1e69f56e1be75fc270abdb9daade494df32ce4b7bb008a0caed5e4bb3c bob
 module.exports = {
@@ -191,10 +190,12 @@ module.exports = {
   newAddress,
   listPeers,
   connectPeer,
+  disconnectPeer,
   listChannel,
   openChannel,
   addInvoice,
   sendPayment,
   channelBalance,
-  closeChannel
+  closeChannel,
+  channalBalance
 };

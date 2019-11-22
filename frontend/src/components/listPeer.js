@@ -7,7 +7,7 @@ export default function ListPeer() {
     <div className='col'>
       <div className='row'>
         <div className='col-4'>
-          <Connect name='Enter address to connect Peer' />
+          <Connect name='Enter address to connect Peer' url='http://localhost:4000/connectPeer' />
         </div>
         <div className='col-8'>
           <TablePeer />
