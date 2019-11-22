@@ -10,13 +10,7 @@ var app = express();
 var route = require('./routes/route');
 
 // set up cors to allow us to accept requests from our client
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL, // allow to server to accept request from different origin
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true // allow session cookie from browser to pass through
-  })
-);
+app.use(cors());
 
 app.use(
   require('express-session')({

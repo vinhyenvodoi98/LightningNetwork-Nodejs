@@ -16,6 +16,9 @@ fi
 # start containers in test suite
 docker-compose up -d simnet-btcd && sleep 5
 
+# generate blocks to fund alice's wallet
+docker-compose run simnet-btcctl generate 1 > /dev/null && sleep 5
+
 docker-compose up -d simnet-lnd-btcd-alice
 docker-compose up -d simnet-lnd-btcd-bob
-docker-compose up -d simnet-lnd-btcd-charlie
+docker-compose up -d simnet-lnd-btcd-charlie && sleep 5

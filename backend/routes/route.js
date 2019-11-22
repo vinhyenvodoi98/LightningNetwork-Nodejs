@@ -10,13 +10,14 @@ router.get('/getInfo', async (req, res) => {
 
 router.get('/walletBalance', async (req, res) => {
   var balance = await rpc.walletBalance();
+  balance.confirmed_balance = BigInt(balance.confirmed_balance).toString();
+  balance.total_balance = BigInt(balance.total_balance).toString();
   res.json({
     balance
   });
 });
 
 router.post('/', async (req, res) => {
-  console.log(req.body);
   res.json({
     hello: 'hello' + req.body.hello
   });
