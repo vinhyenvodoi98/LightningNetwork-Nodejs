@@ -1,8 +1,8 @@
 import React, { useState, initialState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function TablePeer(props) {
-  const [listPeers, setlistPeers] = useState(initialState);
+export default function TableChannel(props) {
+  const [listChannels, setListChannel] = useState(initialState);
 
   async function disconnectPeer(pub_key) {
     try {
@@ -19,7 +19,7 @@ export default function TablePeer(props) {
     try {
       const response = await axios.get(props.listUrl);
 
-      setlistPeers(response.data.listPeers);
+      setListChannel(response.data.channels);
     } catch (error) {
       console.error(error);
     }
@@ -34,33 +34,45 @@ export default function TablePeer(props) {
       <thead>
         <tr>
           <th scope='col'>#</th>
-          <th scope='col'>Identity Pubkey</th>
-          <th scope='col'>Address</th>
+          <th scope='col'>Channel Point</th>
+          <th scope='col'>Local Balance</th>
+          <th scope='col'>Remove Balance</th>
+          <th scope='col'>Fee</th>
           <th scope='col'>Disconnect</th>
         </tr>
       </thead>
 
-      {listPeers === undefined || Object.keys(listPeers).length === 0 ? (
+      {listChannels === undefined || Object.keys(listChannels).length === 0 ? (
         <tbody>
           <tr>
             <th scope='row'></th>
-            <td></td>
             <td></td>
             <td></td>
           </tr>
         </tbody>
       ) : (
         <tbody>
-          {listPeers.peers.map((peer, index) => (
+          {listChannels.map((channel, index) => (
             <tr key={index}>
               <th scope='row'>1</th>
-              <td>{peer.pub_key}</td>
-              <td>{peer.address}</td>
+              <td>{channel.channel_point}</td>
+              {channel.local_balance ? (
+                <>
+                  <td>{channel.local_balance}</td>
+                  <td>{channel.capacity - channel.local_balance - channel.commit_fee}</td>
+                </>
+              ) : (
+                <>
+                  <td>{channel.capacity - channel.remote_balance - channel.commit_fee}</td>
+                  <td>{channel.remote_balance}</td>
+                </>
+              )}
+              <td>{channel.commit_fee}</td>
               <td>
                 <button
                   type='submit'
                   className='btn btn-primary'
-                  onClick={e => disconnectPeer(peer.pub_key)}>
+                  onClick={e => disconnectPeer(channel.channel_point)}>
                   Disconnect
                 </button>
               </td>

@@ -36,6 +36,39 @@ router.post('/disconnectPeer', async (req, res) => {
   res.json(disconnectPeer);
 });
 
+router.get('/listChannels', async (req, res) => {
+  var listChannels = await rpc.listChannels(req.body.pub_key);
+  if (Object.keys(listChannels).length !== 0)
+    listChannels.channels.map(channel => {
+      channel.capacity = BigInt(channel.capacity).toString();
+      if (channel.local_balance) channel.local_balance = BigInt(channel.local_balance).toString();
+      if (channel.remote_balance)
+        channel.remote_balance = BigInt(channel.remote_balance).toString();
+      channel.commit_fee = BigInt(channel.commit_fee).toString();
+    });
+  res.json(listChannels);
+});
+
+router.post('/openChannel', async (req, res) => {
+  var disconnectPeer = await rpc.openChannel(req.body);
+  res.json(disconnectPeer);
+});
+
+router.post('/closeChannel', async (req, res) => {
+  var disconnectPeer = await rpc.closeChannel(req.body.pub_key);
+  res.json(disconnectPeer);
+});
+
+router.post('/addInvoice', async (req, res) => {
+  var addInvoice = await rpc.addInvoice(parseInt(req.body.amt_paid));
+  res.json(addInvoice);
+});
+
+router.post('/sendPayment', async (req, res) => {
+  var sendPayment = await rpc.sendPayment(req.body);
+  res.json(sendPayment);
+});
+
 router.post('/', async (req, res) => {
   res.json({
     hello: 'hello' + req.body.hello

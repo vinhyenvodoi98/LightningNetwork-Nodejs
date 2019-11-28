@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-export default function Connect(props) {
+export default function ConnectPeer(props) {
   const [value, setValue] = useState('');
 
   async function connect() {

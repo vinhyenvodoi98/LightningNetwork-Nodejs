@@ -86,14 +86,13 @@ var disconnectPeer = pub_key => {
   });
 };
 
-var openChannel = () => {
+var openChannel = info => {
   return new Promise((resolve, reject) => {
-    // this is pubkey test
-    var pubkey = '02d61e6b1e69f56e1be75fc270abdb9daade494df32ce4b7bb008a0caed5e4bb3c';
+    console.log(info);
     var request = {
-      node_pubkey_string: pubkey,
-      local_funding_amount: 1000000,
-      push_sat: 0,
+      node_pubkey_string: info.pub_key,
+      local_funding_amount: parseInt(info.local_fund),
+      push_sat: parseInt(info.push_fund),
       target_conf: 1,
       private: false,
       min_confs: 3,
@@ -114,7 +113,7 @@ var channelBalance = () => {
   });
 };
 
-var listChannel = () => {
+var listChannels = () => {
   return new Promise((resolve, reject) => {
     var request = {
       active_only: true
@@ -125,10 +124,11 @@ var listChannel = () => {
   });
 };
 
-var addInvoice = () => {
+var addInvoice = amt_paid_sat => {
   return new Promise((resolve, reject) => {
     var request = {
-      amt_paid: 50000
+      value: amt_paid_sat,
+      amt_paid_sat
     };
     lightning.addInvoice(request, function(err, response) {
       resolve(response);
@@ -136,16 +136,16 @@ var addInvoice = () => {
   });
 };
 
-var sendPayment = () => {
+var sendPayment = body => {
   return new Promise((resolve, reject) => {
+    console.log(body.pub_key);
     var request = {
       // dest: <bytes>,
       // dest_string: <string>,
       // amt: <int64>,
       // payment_hash: <bytes>,
       // payment_hash_string: <string>,
-      payment_request:
-        'lnsb10u1pwuukn8pp54v3xgpv84k8du9l00j8dc0lj7rg5qqc2vpk7496tlm8zv2uyxausdqqcqzpg8tx8z98t8vlvgv5cx9wdc7ch65puxf7e43zgaj3gyu2whvr9rwexe9nns82rpruawr79nraztg0chcg9y5zu8zyagysuvp77k2tjzngq9sezqz'
+      payment_request: body.pub_key
       // final_cltv_delta: <int32>,
       // fee_limit: <FeeLimit>,
       // outgoing_chan_id: <uint64>,
@@ -158,12 +158,13 @@ var sendPayment = () => {
   });
 };
 
-var closeChannel = () => {
+var closeChannel = info => {
   return new Promise((resolve, reject) => {
+    fund = info.split(':');
     var request = {
       channel_point: {
-        funding_txid_str: 'f7b8c3536f38a6e7b9429a0be075e3b4f656dc7c4972af63c057a4e361e6f87b',
-        output_index: 0
+        funding_txid_str: fund[0],
+        output_index: parseInt(fund[1])
       }
     };
     var call = lightning.closeChannel(request);
@@ -191,7 +192,7 @@ module.exports = {
   listPeers,
   connectPeer,
   disconnectPeer,
-  listChannel,
+  listChannels,
   openChannel,
   addInvoice,
   sendPayment,
